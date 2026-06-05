@@ -24,7 +24,6 @@ jobs:
         with:
           args: >-
             --no-progress
-            --exclude-file .lycheeignore
             --accept 200,204,206,301,302,307,308,403,429
             "**/*.md"
         env:

@@ -7,3 +7,23 @@
 # Local config/file references used as inline examples (not real URLs).
 ^research\.config\.json$
 ^research\.config\.example\.json$
+
+# Public API endpoints in reference catalogs that are intentionally listed
+# for human operators but are unstable, auth-gated, deprecated, or return
+# non-2xx status to generic link checkers.
+^https://api\.abs\.gov\.au/?$
+^https://core\.ac\.uk/api-keys$
+^https://data\.un\.org/ws/rest$
+^https://datahelp\.imf\.org/?$
+^https://developers\.epo\.org/authentication$
+^https://eur-lex\.europa\.eu/content/tools/API\.html$
+^https://eur-lex\.europa\.eu/oj$
+^https://fred\.stlouisfed\.org/?$
+^https://fred\.stlouisfed\.org/docs/api/?$
+^https://geogratis\.gc\.ca/api$
+^https://hn\.algolia\.com/api/v1/users/%7Busername%7D$
+^https://newsapi\.org/v2/top-headlines$
+^https://statcan\.gc\.ca/eng/api$
+^https://www\.legislation\.gov\.uk/api$
+^https://www\.thegazette\.co\.uk/api$
+^https://www\.wipo\.int/portal/en/developers/ipc-webservices\.html$
