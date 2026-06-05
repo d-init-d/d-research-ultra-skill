@@ -11,6 +11,7 @@ use immediately.
 
 [![Self-test](https://github.com/d-init-d/d-research-ultra-skill/actions/workflows/lint-and-self-test.yml/badge.svg)](https://github.com/d-init-d/d-research-ultra-skill/actions/workflows/lint-and-self-test.yml)
 [![Link check](https://github.com/d-init-d/d-research-ultra-skill/actions/workflows/link-check.yml/badge.svg)](https://github.com/d-init-d/d-research-ultra-skill/actions/workflows/link-check.yml)
+[![License: CC BY-NC 4.0](https://img.shields.io/badge/License-CC%20BY--NC%204.0-lightgrey.svg)](https://creativecommons.org/licenses/by-nc/4.0/)
 
 Use the core [D Research Skill](https://github.com/d-init-d/d-research-skill)
 when you want the methodology, references, scripts, and workflow so you
@@ -294,7 +295,14 @@ Blocked sources become blocker reports and manual retrieval notes.
 
 ## License
 
-This project uses the license included in `LICENSE`.
+D Research Ultra uses the same license family as the core
+[D Research Skill](https://github.com/d-init-d/d-research-skill):
+[Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/)
+(`CC-BY-NC-4.0`).
+
+See `LICENSE` for the full license text. In short, the material may be
+shared and adapted with attribution for non-commercial purposes, subject
+to the terms of the license.
 
 ## Versioning
 
