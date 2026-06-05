@@ -1,0 +1,44 @@
+name: Lint and self-test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  self-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install chromium
+
+      - name: Run full self-test chain
+        run: npm run self-test
+
+      - name: Check Node script syntax
+        run: node scripts/run_python.mjs scripts/check_node_syntax.py
+
+      - name: Check no local plan files
+        run: node scripts/run_python.mjs scripts/check_no_plan_files.py

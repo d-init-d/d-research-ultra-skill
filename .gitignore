@@ -1,0 +1,19 @@
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.DS_Store
+Thumbs.db
+
+# Local research outputs
+PLAN-*.md
+research-runs/
+*.tmp
+*.log
+
+# Local environment files
+.env
+.env.*
+!.env.example

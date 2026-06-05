@@ -1,0 +1,93 @@
+{
+  "name": "d-research-ultra",
+  "version": "3.1.0-ultra.1",
+  "core": {
+    "name": "d-research",
+    "version": "3.1.0",
+    "relationship": "bundled"
+  },
+  "description": "Runtime-neutral prebuilt multi-agent distribution of D Research.",
+  "orchestrator": {
+    "id": "main-research-agent",
+    "name": "D Research Ultra Orchestrator",
+    "file": "agents/orchestrator.md"
+  },
+  "roles": [
+    {
+      "id": "source-mapper",
+      "name": "D Research Source Mapper",
+      "file": "agents/subagent-roles/source-mapper.md",
+      "wave": 1,
+      "mission": "Maximize lawful public-source recall; return source map, search matrix, candidate URLs, blockers, identity risks, and next-query plan."
+    },
+    {
+      "id": "public-web-community-hunter",
+      "name": "D Research Public Web & Community Hunter",
+      "file": "agents/subagent-roles/public-web-community-hunter.md",
+      "wave": 1,
+      "mission": "Find lawful public web, community, forum, video, official social, and archive leads with strict privacy and identity discipline."
+    },
+    {
+      "id": "recall-auditor",
+      "name": "D Research Recall Auditor",
+      "file": "agents/subagent-roles/recall-auditor.md",
+      "wave": 2,
+      "mission": "Run adversarial second-pass recall for missed sources, alternate language/register paths, archives, mirrors, and contradictions."
+    },
+    {
+      "id": "data-extractor",
+      "name": "D Research Data Extractor",
+      "file": "agents/subagent-roles/data-extractor.md",
+      "wave": 2,
+      "mission": "Extract auditable structured data from accessible public sources and report coverage, selectors, endpoints, files, and blockers."
+    },
+    {
+      "id": "evidence-verifier",
+      "name": "D Research Evidence Verifier",
+      "file": "agents/subagent-roles/evidence-verifier.md",
+      "wave": 3,
+      "mission": "Verify claims against exact URLs, primary sources, contradictions, staleness checks, confidence, and evidence-ledger rows."
+    },
+    {
+      "id": "report-synthesizer",
+      "name": "D Research Report Synthesizer",
+      "file": "agents/subagent-roles/report-synthesizer.md",
+      "wave": 4,
+      "mission": "Synthesize verified findings into source-backed reports with exact URLs, research trail, blockers, caveats, confidence, and gaps."
+    }
+  ],
+  "execution_modes": {
+    "fast": {
+      "strategy": "single-agent",
+      "workers": []
+    },
+    "standard": {
+      "strategy": "staged-workers",
+      "workers": [
+        "source-mapper",
+        "data-extractor",
+        "evidence-verifier",
+        "report-synthesizer"
+      ]
+    },
+    "completeness-first": {
+      "strategy": "parallel-waves",
+      "waves": [
+        [
+          "source-mapper",
+          "public-web-community-hunter"
+        ],
+        [
+          "recall-auditor",
+          "data-extractor"
+        ],
+        [
+          "evidence-verifier"
+        ],
+        [
+          "report-synthesizer"
+        ]
+      ]
+    }
+  }
+}
