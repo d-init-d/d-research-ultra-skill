@@ -1,165 +1,246 @@
 # D Research Ultra
 
-Prebuilt multi-agent deep research skill for AI agents: D Research core
-methodology plus a runtime-neutral orchestrator and six ready-to-register
-worker roles.
+Prebuilt multi-agent deep research skill for AI agents.
+
+D Research Ultra is developed from the core
+[D Research Skill](https://github.com/d-init-d/d-research-skill). It
+ships the D Research core methodology as a self-contained package, then
+adds a runtime-neutral orchestration layer and six ready-to-register
+worker roles for teams that want a research system they can install and
+use immediately.
 
 [![Self-test](https://github.com/d-init-d/d-research-ultra-skill/actions/workflows/lint-and-self-test.yml/badge.svg)](https://github.com/d-init-d/d-research-ultra-skill/actions/workflows/lint-and-self-test.yml)
 [![Link check](https://github.com/d-init-d/d-research-ultra-skill/actions/workflows/link-check.yml/badge.svg)](https://github.com/d-init-d/d-research-ultra-skill/actions/workflows/link-check.yml)
 
-Use [`d-research-skill`](https://github.com/d-init-d/d-research-skill)
-when you want the core methodology and prefer to build your own research
-system. Use `d-research-ultra-skill` when you want the same methodology
-packaged as a ready-made multi-agent research system.
+Use the core [D Research Skill](https://github.com/d-init-d/d-research-skill)
+when you want the methodology, references, scripts, and workflow so you
+can design your own agent system. Use D Research Ultra when you want the
+same foundation packaged as a ready-made multi-agent research pipeline.
 
-## At A Glance
+## Positioning
 
-| Area | What D Research Ultra provides |
-|---|---|
-| Primary users | Agent operators who want a prebuilt source-backed research pipeline. |
-| Access model | Read-only public-source research by default. Blocked sources become blocker reports. |
-| Agent model | One Main Research Agent plus six portable worker role definitions. |
-| Runtime model | Runtime-neutral. Host CLIs map the bundled roles to their own subagent/task/worker mechanism. |
-| Fallback model | If no real workers exist, the main agent runs the same gates manually and discloses the fallback. |
-| Verification | Offline self-tests, internal-reference checks, node syntax checks, and CI workflows. |
+| Package | Best for | What you get |
+|---|---|---|
+| [D Research Skill](https://github.com/d-init-d/d-research-skill) | Builders who want a flexible core methodology. | Core workflow, references, scripts, templates, adapters, examples, and evals. |
+| D Research Ultra | Operators who want a prebuilt research agent system. | Everything in the core methodology plus a Main Research Agent, six portable worker roles, wave execution, spawn contract, and install recipes. |
+
+D Research Ultra is not tied to one CLI, vendor, model provider, or
+agent runtime. Host tools such as Claude Code, opencode, Minimax/Mavis,
+Codex, or private agent CLIs can map the bundled roles to their own
+subagent, task, worker, or background-agent mechanism.
 
 ## Product Scope
 
-This is a skill package, not a hosted crawler, SaaS product, Python
-package, Docker image, notebook, or API service.
+D Research Ultra is a skill package. It is not a hosted crawler, SaaS
+product, Python package, Docker image, notebook, or API service.
 
-An agent reads `SKILL.md` and follows the workflow. The repository ships
-instructions, adapter policies, worker role definitions, references,
-templates, examples, eval benches, and optional helper scripts. The
-helper scripts are small, local, and auditable; they support the
-workflow but do not replace the agent.
+An agent reads `SKILL.md` and follows the workflow. The repository
+ships:
 
-The runtime-specific installation notes below are intentionally kept in
-this README. `SKILL.md` stays portable and compact so agent context is
-spent on research, not on vendor setup instructions.
+- portable agent instructions
+- a runtime-neutral worker contract
+- six worker role definitions
+- research references and safety policies
+- templates and examples
+- local helper scripts
+- eval benches and CI checks
 
-## What Is Included
+Runtime-specific installation details are intentionally kept in this
+README. `SKILL.md` stays compact and portable so agent context is spent
+on the research task, not on vendor setup instructions.
 
-- `SKILL.md` - skill entry point and trigger guidance.
-- `AGENTS.md` - root agent workflow and execution rules.
-- `agents/manifest.json` - canonical worker roster and execution waves.
-- `agents/orchestrator.md` - Main Research Agent playbook.
-- `agents/spawn-contract.md` - runtime-neutral worker contract.
-- `agents/subagent-roles/` - six portable worker role definitions.
-- `references/`, `templates/`, `scripts/`, `adapters/`, `examples/`,
-  and `docs/` - bundled D Research core methodology and tooling.
-- `.github/workflows/` - CI checks for scripts and documentation health.
-- `.agents/skills/testing-scripts/` - maintainer sub-skill for script
-  verification after edits.
+## Capabilities
+
+| Area | Capability |
+|---|---|
+| Research modes | Fast, standard, and completeness-first research. |
+| Source strategy | Browser-first public-source discovery with source maps, query fanout, recall audits, archives, APIs, files, and contradiction checks. |
+| Evidence model | Exact URLs, source types, access states, extraction methods, evidence ledgers, caveats, blockers, and confidence. |
+| Multi-agent model | One Main Research Agent plus six portable worker roles. |
+| Runtime model | Host CLIs map the bundled roles to native subagent/task/worker mechanisms. |
+| Fallback model | If no real workers exist, the main agent runs the same gates manually and discloses the fallback. |
+| Safety model | Read-only public-source work; no login bypass, paywall bypass, captcha evasion, private profiles, doxxing, stalking, or private-data aggregation. |
+| Quality gates | Offline self-tests, internal-reference checks, decision-tree coverage, node syntax checks, and GitHub Actions. |
+
+## Architecture
+
+```text
+D Research Ultra
+  Main Research Agent
+    - intake and safety routing
+    - depth selection
+    - worker dispatch
+    - evidence merge
+    - final verification gate
+    - final answer
+
+  Worker roster
+    - D Research Source Mapper
+    - D Research Recall Auditor
+    - D Research Public Web & Community Hunter
+    - D Research Data Extractor
+    - D Research Evidence Verifier
+    - D Research Report Synthesizer
+```
+
+The canonical roster lives in `agents/manifest.json`.
+The orchestration playbook lives in `agents/orchestrator.md`.
+The runtime adapter contract lives in `agents/spawn-contract.md`.
+The portable worker prompts live in `agents/subagent-roles/`.
+
+## Repository Layout
+
+| Path | Purpose |
+|---|---|
+| `SKILL.md` | Skill entry point, triggers, execution modes, and output standards. |
+| `AGENTS.md` | Root agent workflow, safety rules, specialized branches, and final-answer contract. |
+| `agents/manifest.json` | Canonical role IDs, names, files, and execution waves. |
+| `agents/orchestrator.md` | Main Research Agent playbook for pipeline mode. |
+| `agents/spawn-contract.md` | Runtime-neutral contract for installing and dispatching workers. |
+| `agents/subagent-roles/` | Six portable worker role definitions. |
+| `references/` | Research protocols, source discovery, extraction, verification, safety, reporting, and specialized-domain guidance. |
+| `templates/` | Evidence ledgers, search logs, PRISMA flow, data packages, reports, and research plans. |
+| `scripts/` | Local helper scripts for probing, crawling, extraction, evidence ledgers, reports, evals, and validation. |
+| `examples/` | Usage examples, datasets, eval benches, and fixtures. |
+| `.github/workflows/` | CI checks for release health. |
+| `.agents/skills/testing-scripts/` | Maintainer skill for script and reference verification. |
 
 ## Worker Roster
 
 | Role ID | Worker name | Purpose |
 |---|---|---|
-| `source-mapper` | `D Research Source Mapper` | Source maps, search matrices, candidate URLs, blockers, identity risks, next queries. |
-| `recall-auditor` | `D Research Recall Auditor` | Adversarial second-pass recall, alternate names/languages/registers, archives, mirrors, contradictions. |
-| `public-web-community-hunter` | `D Research Public Web & Community Hunter` | Lawful public web, forum, community, official social, video, and archive leads with privacy discipline. |
-| `data-extractor` | `D Research Data Extractor` | Structured extraction from public files, APIs, tables, embedded data, PDFs, OCR, and visible text. |
-| `evidence-verifier` | `D Research Evidence Verifier` | Claim verification with exact URLs, primary-source preference, contradiction checks, confidence, and ledger rows. |
-| `report-synthesizer` | `D Research Report Synthesizer` | Source-backed reports from verified findings, with caveats, blockers, gaps, and no unsupported claims. |
+| `source-mapper` | `D Research Source Mapper` | Build source maps, search matrices, candidate URLs, blockers, identity risks, and next queries. |
+| `recall-auditor` | `D Research Recall Auditor` | Run adversarial second-pass recall across alternate names, languages, registers, archives, mirrors, and contradiction paths. |
+| `public-web-community-hunter` | `D Research Public Web & Community Hunter` | Find lawful public web, community, forum, official social, video, and archive leads with privacy and identity discipline. |
+| `data-extractor` | `D Research Data Extractor` | Extract structured data from public files, APIs, HTML tables, embedded data, PDFs, OCR, and visible text. |
+| `evidence-verifier` | `D Research Evidence Verifier` | Verify claims with exact URLs, primary-source preference, contradictions, staleness checks, confidence, and ledger rows. |
+| `report-synthesizer` | `D Research Report Synthesizer` | Produce source-backed report drafts from verified findings, with caveats, blockers, gaps, and no unsupported claims. |
 
 ## Execution Modes
 
-- **Fast**: one context, direct verification, no full pipeline.
-- **Standard**: staged worker use for normal multi-source research.
-- **Completeness-first**: wave-based six-worker pipeline for audit-grade,
-  contested, due-diligence, low-recall, or long-horizon research.
+### Fast
 
-Completeness-first runs as a wave graph:
+Use for atomic facts, one URL, one source, or a tightly scoped lookup.
+The main agent runs direct verification and skips the full worker
+pipeline.
 
-1. Source Mapper + Public Web & Community Hunter.
-2. Recall Auditor + Data Extractor.
+### Standard
+
+Use for ordinary multi-source research. The main agent can delegate
+Source Mapper, Data Extractor, Evidence Verifier, and Report Synthesizer
+when real workers are available.
+
+### Completeness-First
+
+Use for audit-grade, due-diligence, contested, low-recall, multilingual,
+public-role, or long-horizon research.
+
+Completeness-first runs as a dependency-aware wave graph:
+
+1. Source Mapper plus Public Web & Community Hunter.
+2. Recall Auditor plus Data Extractor.
 3. Evidence Verifier.
 4. Report Synthesizer.
 
 Hosts with parallel workers may run each wave concurrently. Sequential
-hosts preserve the same order. Hosts without workers use manual fallback.
+hosts preserve the same order. Hosts without workers use manual fallback
+and disclose it in the research trail.
 
-## Install
+## Quick Start
 
-### Generic Skill Install
-
-Clone this repository into the skill directory used by your agent
+Clone the repository into the skill directory used by your agent
 runtime:
 
 ```bash
 git clone https://github.com/d-init-d/d-research-ultra-skill.git d-research-ultra
 ```
 
-Then point the runtime at `d-research-ultra/SKILL.md`.
+Point the runtime at:
+
+```text
+d-research-ultra/SKILL.md
+```
 
 If your runtime supports worker agents, register the six role files from
-`agents/subagent-roles/` using the names in `agents/manifest.json`.
+`agents/subagent-roles/` using the names and IDs in
+`agents/manifest.json`.
+
+## Runtime Recipes
+
+These recipes describe how to map the portable package into common agent
+runtimes. They are operator guidance only; the core skill itself stays
+runtime-neutral.
+
+### Generic Agent Runtime
+
+1. Install this repository as a skill folder.
+2. Load `SKILL.md` as the skill entry point.
+3. Load `AGENTS.md` as the root workflow when the runtime supports root
+   agent instructions.
+4. Register workers from `agents/subagent-roles/`.
+5. Use `agents/manifest.json` for canonical names and execution waves.
+6. Use `agents/spawn-contract.md` to map list/install/dispatch/result
+   behavior to the host runtime.
 
 ### Claude Code
 
-Install the skill folder where your Claude Code setup loads project or
-user skills. For subagents, translate each role file into a Claude Code
-custom subagent:
+Install the repository where Claude Code loads project or user skills.
+Then translate each file in `agents/subagent-roles/` into a Claude Code
+custom subagent.
 
-- `agents/subagent-roles/source-mapper.md`
-- `agents/subagent-roles/recall-auditor.md`
-- `agents/subagent-roles/public-web-community-hunter.md`
-- `agents/subagent-roles/data-extractor.md`
-- `agents/subagent-roles/evidence-verifier.md`
-- `agents/subagent-roles/report-synthesizer.md`
-
-Use `agents/manifest.json` for canonical names. The Main Research Agent
-should remain the active chat/session agent; worker agents should not
-call each other directly.
+Keep the active chat/session agent as the Main Research Agent. Worker
+agents should not call each other directly; orchestration remains in the
+main session.
 
 ### opencode
 
 Install this repository as a skill folder, then map the six role files
-to opencode agents using your project's agent configuration. Keep
-`D Research Ultra Orchestrator` as the primary/main agent behavior and
-allow task delegation only to the six `D Research ...` workers listed in
+to opencode agents using your project configuration.
+
+Keep `D Research Ultra Orchestrator` as the primary behavior and allow
+delegation only to the six `D Research ...` workers listed in
 `agents/manifest.json`.
 
-### Other Agent Runtimes
+### Minimax, Mavis, Codex, Or Private CLIs
 
-Use the same portable roster:
+Use the same portable adapter pattern:
 
 1. Read `agents/manifest.json`.
-2. Create/register each worker from its role file.
+2. Create or register each worker from its role file.
 3. Use `agents/orchestrator.md` as the main-agent playbook.
-4. Map dispatch/poll/result handling to the host runtime's native
-   worker mechanism.
+4. Map dispatch, polling, failure handling, and final-result collection
+   to the host runtime's native worker mechanism.
 
-The core skill never requires a specific command name.
+No core file requires a specific command name.
 
 ### No Worker Support
 
-If the host cannot run real worker agents, install only the skill folder.
-The Main Research Agent will run the D Research core workflow and apply
-the worker checklists manually when needed.
+Install only the skill folder. The Main Research Agent will run the D
+Research core workflow and apply the worker checklists manually when
+needed.
 
 ## Optional Tooling Setup
 
-For the Node helpers:
+For Node helper scripts:
 
 ```bash
 npm ci
 npx playwright install chromium
 ```
 
-For the Python helpers:
+For Python helper scripts:
 
 ```bash
 python --version
 ```
 
 The bundled Python scripts are stdlib-first. Optional extras are listed
-in `pyproject.toml` for embeddings, translation, and extraction features.
+in `pyproject.toml` for embeddings, translation, and extraction
+features.
 
 ## Verification
 
-Run the full offline self-test chain:
+Run the full offline self-test chain before release:
 
 ```bash
 npm run self-test
@@ -175,42 +256,63 @@ node scripts/run_python.mjs scripts/check_no_plan_files.py
 node scripts/run_python.mjs scripts/run_metadata.py self-test
 ```
 
-CI runs the same core checks on pull requests and pushes.
+GitHub Actions runs the release-health checks on push and pull request:
 
-## Runtime Contract
+- `Lint and self-test`
+- `Link check`
 
-D Research Ultra expects host adapters to support as many of these
-capabilities as possible:
+## Release Quality
 
-- list configured workers
-- install/register bundled worker definitions
-- dispatch a task to a named worker
-- run independent workers in parallel
-- read final worker outputs
-- restrict worker tools and permissions
+D Research Ultra is maintained as a ready-to-ship skill package:
 
-If a host lacks worker support, the main agent runs the D Research core
-workflow and applies the same role checklists manually.
-
-See `agents/spawn-contract.md` for the adapter contract and
-`agents/manifest.json` for canonical role metadata.
+- Runtime-specific guidance lives in README, not in `SKILL.md`.
+- Internal references are checked by `scripts/check_internal_refs.py`.
+- Every `references/*.md` file must be reachable from `SKILL.md` or
+  `AGENTS.md`.
+- Helper scripts have offline self-tests.
+- Node helper syntax is checked with `node --check`.
+- Local research plan artifacts are blocked from commits.
+- CI validates self-tests and link health.
 
 ## Safety
 
-D Research Ultra is read-only and public-source first. It must not
-bypass login walls, paywalls, captchas, anti-bot systems, robots
-restrictions, rate limits, private groups, private profiles, or access
-controls.
+D Research Ultra is read-only and public-source first.
 
-For person-related work, it only supports lawful public-role research.
-It refuses doxxing, stalking, harassment, deanonymization, private data,
-or sensitive personal-data aggregation.
+It must not:
+
+- bypass login walls, paywalls, captchas, anti-bot systems, robots
+  restrictions, rate limits, private groups, private profiles, or access
+  controls
+- use stolen cookies, leaked tokens, or unauthorized credentials
+- profile private people
+- deanonymize pseudonyms
+- support stalking, harassment, doxxing, or private-data aggregation
+- collect sensitive personal information outside a lawful public-role
+  research scope
+
+Blocked sources become blocker reports and manual retrieval notes.
+
+## License
+
+This project uses the license included in `LICENSE`.
 
 ## Versioning
 
 The Ultra version tracks the bundled D Research core version with an
-Ultra suffix. Example: `3.1.0-ultra.1`.
+Ultra suffix. Example:
 
-The Python metadata uses PEP 440 local-version syntax
-(`3.1.0+ultra.1`) while npm and the skill manifest use SemVer
-prerelease syntax (`3.1.0-ultra.1`).
+```text
+3.1.0-ultra.1
+```
+
+Python metadata uses PEP 440 local-version syntax:
+
+```text
+3.1.0+ultra.1
+```
+
+npm metadata and the skill manifest use SemVer prerelease syntax:
+
+```text
+3.1.0-ultra.1
+```
