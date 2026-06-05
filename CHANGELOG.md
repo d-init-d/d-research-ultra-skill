@@ -3,15 +3,17 @@
 All notable changes to this project are documented in this file.
 
 The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
-and this project uses Semantic Versioning with an Ultra prerelease suffix
-while it tracks the bundled D Research core version.
+and this project uses Semantic Versioning. D Research Ultra follows the same
+public version line as the bundled D Research core release.
 
 ## [Unreleased]
+
+## [3.1.1] - 2026-06-05
 
 ### Added
 
 - Created D Research Ultra as the prebuilt multi-agent distribution of
-  D Research.
+  D Research v3.1.1.
 - Added a runtime-neutral Ultra layer:
   - `agents/manifest.json`
   - `agents/spawn-contract.md`
@@ -45,7 +47,3 @@ while it tracks the bundled D Research core version.
   subagent/task/worker format.
 - If a runtime has no real worker mechanism, the main agent still runs
   the D Research core workflow and manually applies the role checklists.
-
-## [3.1.0-ultra.1] - 2026-06-05
-
-Initial Ultra package baseline built from D Research core v3.1.0.

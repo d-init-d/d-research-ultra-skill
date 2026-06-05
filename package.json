@@ -1,6 +1,6 @@
 {
   "name": "d-research-ultra-skill-tools",
-  "version": "3.1.0-ultra.1",
+  "version": "3.1.1",
   "description": "Runtime-neutral prebuilt multi-agent deep research skill for AI agents.",
   "type": "module",
   "license": "CC-BY-NC-4.0",

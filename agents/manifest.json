@@ -1,9 +1,9 @@
 {
   "name": "d-research-ultra",
-  "version": "3.1.0-ultra.1",
+  "version": "3.1.1",
   "core": {
     "name": "d-research",
-    "version": "3.1.0",
+    "version": "3.1.1",
     "relationship": "bundled"
   },
   "description": "Runtime-neutral prebuilt multi-agent distribution of D Research.",

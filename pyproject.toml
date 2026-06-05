@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "d-research-ultra-skill"
-version = "3.1.0+ultra.1"
+version = "3.1.1"
 description = "Runtime-neutral prebuilt multi-agent deep research skill for AI agents."
 readme = "README.md"
 license = { text = "CC-BY-NC-4.0" }
@@ -74,8 +74,7 @@ Changelog = "https://github.com/d-init-d/d-research-ultra-skill/blob/main/CHANGE
 # an installable Python package. The pyproject metadata exists so external
 # tooling (Renovate, security scanners, dependabot) can read accurate
 # metadata, and so optional extras have a clean install surface.
-# The Python package version uses PEP 440 local-version syntax; the skill
-# manifest and npm metadata use SemVer prerelease syntax.
+# The Python package version tracks the public D Research Ultra release.
 py-modules = []
 
 [tool.ruff]

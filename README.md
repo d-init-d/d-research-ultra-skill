@@ -303,24 +303,3 @@ D Research Ultra uses the same license family as the core
 See `LICENSE` for the full license text. In short, the material may be
 shared and adapted with attribution for non-commercial purposes, subject
 to the terms of the license.
-
-## Versioning
-
-The Ultra version tracks the bundled D Research core version with an
-Ultra suffix. Example:
-
-```text
-3.1.0-ultra.1
-```
-
-Python metadata uses PEP 440 local-version syntax:
-
-```text
-3.1.0+ultra.1
-```
-
-npm metadata and the skill manifest use SemVer prerelease syntax:
-
-```text
-3.1.0-ultra.1
-```
