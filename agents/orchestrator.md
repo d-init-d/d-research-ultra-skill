@@ -15,8 +15,8 @@ The Main Research Agent is responsible for:
 
 1. Intake and safety routing.
 2. Choosing fast, standard, or completeness-first depth.
-3. Discovering or installing the six bundled worker roles when the host
-   supports it and the user allows it.
+3. Spawning ephemeral workers from the six bundled role definitions
+   when the host supports real worker sessions.
 4. Dispatching compact, role-specific task prompts.
 5. Waiting for worker outputs according to the host runtime's semantics.
 6. Merging only explicit worker outputs, evidence, caveats, and blockers.
@@ -45,21 +45,28 @@ The canonical roster is defined in `agents/manifest.json`.
 
 Before pipeline mode, determine what the host can do:
 
-- list configured workers
-- install/register bundled role definitions
-- dispatch a task to a named worker
+- dispatch an ephemeral worker from a role prompt
 - run workers in parallel
 - poll or resume workers
 - restrict worker tools or permissions
+- use an existing persistent worker selected by the user
+- install/register workers only when the user explicitly requests it
 
-If missing workers can be installed from bundled files, ask the user
-before creating them. If the runtime cannot install workers but can run
-ad hoc tasks, dispatch with an inline role summary and reference the
-role file path if supported. If neither is available, use manual
-fallback.
+Use this dispatch order:
 
-Do not require any specific command name. The host adapter owns command
-translation.
+1. Ephemeral parallel workers for independent roles in the same wave.
+2. Ephemeral sequential workers when parallel execution is unavailable.
+3. Manual role checklists in the main context when no worker can run.
+
+Persistent registration is not part of normal execution. If the user
+explicitly requests reusable workers, explain the host's available
+scopes, obtain approval for the selected scope, and register only the
+requested roles. Merely running inside a project does not make an
+ephemeral worker a project-level installation.
+
+Workers inherit the host's default model unless the user or runtime
+configuration explicitly selects another model. Do not require any
+specific command name; the host adapter owns command translation.
 
 ## Execution Modes
 

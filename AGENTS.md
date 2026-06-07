@@ -41,16 +41,22 @@ Blocked sources become blocker reports and manual retrieval notes.
 
 Before any multi-agent run, inspect the host environment conceptually:
 
-1. Can this runtime list configured worker agents?
-2. Can this runtime create/register bundled worker definitions?
-3. Can this runtime dispatch one task to a named worker?
-4. Can this runtime run workers in parallel or only sequentially?
-5. Can worker outputs be resumed or polled, or do they return only a
+1. Can this runtime dispatch an ephemeral task worker with a role prompt?
+2. Can this runtime run workers in parallel or only sequentially?
+3. Can worker outputs be resumed or polled, or do they return only a
    final message?
+4. Can worker tools or permissions be restricted?
+5. Does the user explicitly want persistent worker registration?
 
-If the host exposes those abilities, use them through the host's native
-mechanism. If it does not, run single-agent mode and apply the same role
-checklists manually. Do not pretend a worker ran when it did not.
+Use ephemeral workers by default. Run independent roles in parallel when
+possible, otherwise run them sequentially in dependency order. If the
+host cannot run real workers, apply the same role checklists manually in
+the main context. Do not create persistent worker configuration unless
+the user explicitly requests it, and do not pretend a worker ran when it
+did not.
+
+Ephemeral workers inherit the host's default model unless the user or
+runtime configuration explicitly selects another model.
 
 Canonical roster data lives in `agents/manifest.json`. Detailed dispatch
 rules live in `agents/orchestrator.md` and `agents/spawn-contract.md`.

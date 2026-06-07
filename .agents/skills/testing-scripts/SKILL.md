@@ -15,6 +15,7 @@ Run focused checks first:
 ```bash
 npm run refs:check
 npm run refs:check:decision-tree
+npm run contract:check
 node scripts/run_python.mjs scripts/check_node_syntax.py
 node scripts/run_python.mjs scripts/check_no_plan_files.py
 node scripts/run_python.mjs scripts/run_metadata.py self-test
@@ -40,6 +41,8 @@ npx playwright install chromium
 - Every command exits with status 0.
 - `refs:check` prints that all backticked internal refs resolve.
 - `refs:check:decision-tree` confirms reference reachability.
+- `contract:check` confirms aligned release metadata, six valid role
+  files, and the ephemeral-first lifecycle policy.
 - Node syntax checks every `.mjs` file.
 - No `PLAN-*.md` local roadmap files are present.
 - The full self-test chain ends without failures.

@@ -1,6 +1,6 @@
 {
   "name": "d-research-ultra",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "core": {
     "name": "d-research",
     "version": "3.1.1",
@@ -11,6 +11,16 @@
     "id": "main-research-agent",
     "name": "D Research Ultra Orchestrator",
     "file": "agents/orchestrator.md"
+  },
+  "worker_lifecycle": {
+    "default": "ephemeral",
+    "dispatch_order": [
+      "ephemeral-parallel",
+      "ephemeral-sequential",
+      "manual-checklist"
+    ],
+    "persistent_registration": "explicit-user-opt-in",
+    "model_policy": "inherit-host-default-unless-explicitly-configured"
   },
   "roles": [
     {

@@ -1,6 +1,6 @@
 ---
 name: "d-research-ultra"
-description: "Prebuilt multi-agent deep research skill for AI agents. Use for source-backed web research, public-data collection, literature reviews, due diligence, policy or standards analysis, market or technical research, evidence ledgers, execution gates, blocker reports, and audit-grade synthesis. Ships the D Research core methodology plus a runtime-neutral orchestrator and six bundled worker-agent role definitions; the host CLI maps those roles to its own subagent/task mechanism when available, otherwise the main agent runs the same gates manually."
+description: "Prebuilt multi-agent deep research skill for AI agents. Use for source-backed web research, public-data collection, literature reviews, due diligence, policy or standards analysis, market or technical research, evidence ledgers, execution gates, blocker reports, and audit-grade synthesis. Ships the D Research core methodology plus a runtime-neutral orchestrator and six bundled worker-agent role definitions. Uses ephemeral parallel or sequential workers when the host supports them, falls back to manual role checklists when it does not, and creates persistent workers only when the user explicitly requests installation."
 ---
 
 # D Research Ultra
@@ -124,15 +124,21 @@ Read `agents/orchestrator.md` for the full dispatch procedure and
 
 When a real worker mechanism exists, the main agent should:
 
-1. Discover whether the six canonical workers are already configured.
-2. If a host supports installing bundled role files, ask the user before
-   creating or registering missing workers.
-3. Dispatch role-specific task prompts using the host's own subagent or
-   task mechanism.
+1. Prefer ephemeral, task-scoped workers initialized from the bundled
+   role definitions.
+2. Run independent workers in parallel when the host supports it.
+3. Otherwise run the same workers sequentially while preserving wave
+   dependencies.
 4. Request compact, structured final outputs from each worker.
 5. Merge only returned evidence and explicit caveats, not hidden worker
    assumptions.
-6. Fall back to manual checklists when a worker cannot run.
+6. Fall back to manual role checklists when no real worker can run.
+
+Do not create persistent worker files or registrations by default.
+Persistent installation is an optional optimization that requires an
+explicit user request and an explicit host scope. Dynamic workers inherit
+the host's default model unless the user or runtime configuration selects
+another model.
 
 Do not hard-code one vendor's command names in the core skill. Runtime
 adapters may live outside this core layer, but the skill body should

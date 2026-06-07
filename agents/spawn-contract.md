@@ -10,38 +10,68 @@ It intentionally avoids vendor-specific command names.
 
 An ideal host supports:
 
-1. `list_workers`: return configured worker names/IDs.
-2. `install_worker`: register a worker from a bundled role file.
-3. `run_worker`: dispatch one task to a named worker.
-4. `run_parallel`: dispatch independent workers concurrently.
-5. `read_worker_result`: collect final worker output.
-6. `restrict_tools`: give workers read-only or scoped permissions.
+1. `run_ephemeral_worker`: start a task-scoped worker from a role prompt.
+2. `run_parallel`: dispatch independent ephemeral workers concurrently.
+3. `read_worker_result`: collect final worker output.
+4. `restrict_tools`: give workers read-only or scoped permissions.
+5. `list_workers`: optionally discover user-selected persistent workers.
+6. `install_worker`: optionally register a persistent worker after
+   explicit user approval.
 
-D Research Ultra still works when only `run_worker` exists. If no real
-worker mechanism exists, use single-agent fallback.
+D Research Ultra still works when only sequential ephemeral dispatch is
+available. If no real worker mechanism exists, use single-agent fallback.
 
-## Installation Behavior
+## Default Worker Lifecycle
 
-Adapters should read `agents/manifest.json` and register the six roles
-from `agents/subagent-roles/*.md`.
+Workers are ephemeral by default:
 
-Ask the user before installing missing workers unless the host's normal
-skill installer already asked for permission. Installation should be
-idempotent: existing workers with matching canonical role IDs or names
-should not be duplicated.
+- initialize each worker from the matching role file
+- provide only task-local context and required upstream results
+- run independent roles in parallel when possible
+- otherwise run them sequentially in dependency order
+- collect the final structured result
+- allow the worker session to end without writing persistent agent files
 
 Worker system prompts come from each role file's `## System Prompt`
 block. Descriptions and personas come from the `## Description` and
 `## Persona` sections.
 
+Working inside a project does not make an ephemeral worker a
+project-scoped installation. A worker becomes persistent only when the
+host writes or registers a reusable agent definition.
+
+## Persistent Registration
+
+Persistent registration is optional and never the default installation
+path. Create persistent workers only when the user explicitly asks for
+reusable agents and selects or confirms the host scope.
+
+Adapters that support persistent registration should:
+
+- explain the available scopes before writing files or configuration
+- request approval for the selected scope
+- read `agents/manifest.json` and register only the requested roles
+- make installation idempotent using canonical role IDs or names
+- document where definitions were written and how to remove them
+
+Installing the Ultra skill does not itself authorize creation of
+persistent worker definitions.
+
 ## Dispatch Behavior
 
-Dispatch prompts should include only task-local context plus the
-role-specific request. Do not paste all role files into every dispatch.
-Configured workers already have their system prompts.
+Ephemeral dispatch should initialize the worker from its role file, then
+include only task-local context, required upstream results, and the
+role-specific request. Do not paste unrelated role files into a worker.
+
+When the user has already selected a compatible persistent worker, the
+adapter may dispatch to it without repeating its stored system prompt.
 
 Workers must return compact, structured outputs. The Main Research
 Agent is responsible for final synthesis and final user-facing wording.
+
+Workers inherit the host's default model unless the user or runtime
+configuration explicitly selects another model. Adapters must not assume
+that every host uses the main session's exact model.
 
 ## Parallel Behavior
 
@@ -70,8 +100,11 @@ Never simulate a worker silently.
 
 Runtime adapters should document:
 
-- where worker definitions are installed
+- whether ephemeral workers are supported
+- whether parallel dispatch is supported
+- which model-selection behavior the host uses
+- where persistent worker definitions are installed, if the user opts in
 - how users invoke the orchestrator
 - how the adapter maps role IDs to host worker names
 - which worker capabilities are unsupported
-- how to uninstall or update workers
+- how to uninstall or update persistent workers, if applicable

@@ -5,7 +5,7 @@ Prebuilt multi-agent deep research skill for AI agents.
 D Research Ultra is developed from the core
 [D Research Skill](https://github.com/d-init-d/d-research-skill). It
 ships the D Research core methodology as a self-contained package, then
-adds a runtime-neutral orchestration layer and six ready-to-register
+adds a runtime-neutral orchestration layer and six ready-to-run
 worker roles for teams that want a research system they can install and
 use immediately.
 
@@ -58,7 +58,9 @@ on the research task, not on vendor setup instructions.
 | Source strategy | Browser-first public-source discovery with source maps, query fanout, recall audits, archives, APIs, files, and contradiction checks. |
 | Evidence model | Exact URLs, source types, access states, extraction methods, evidence ledgers, caveats, blockers, and confidence. |
 | Multi-agent model | One Main Research Agent plus six portable worker roles. |
-| Runtime model | Host CLIs map the bundled roles to native subagent/task/worker mechanisms. |
+| Runtime model | Host CLIs spawn ephemeral workers by default: parallel by wave, sequential when needed, then manual checklist fallback. |
+| Worker lifecycle | Dynamic workers are session/task-scoped. Persistent worker registration is optional and requires explicit user approval. |
+| Model policy | Workers inherit the host default unless the user or runtime explicitly selects another model. |
 | Fallback model | If no real workers exist, the main agent runs the same gates manually and discloses the fallback. |
 | Safety model | Read-only public-source work; no login bypass, paywall bypass, captcha evasion, private profiles, doxxing, stalking, or private-data aggregation. |
 | Quality gates | Offline self-tests, internal-reference checks, decision-tree coverage, node syntax checks, and GitHub Actions. |
@@ -97,7 +99,7 @@ The portable worker prompts live in `agents/subagent-roles/`.
 | `AGENTS.md` | Root agent workflow, safety rules, specialized branches, and final-answer contract. |
 | `agents/manifest.json` | Canonical role IDs, names, files, and execution waves. |
 | `agents/orchestrator.md` | Main Research Agent playbook for pipeline mode. |
-| `agents/spawn-contract.md` | Runtime-neutral contract for installing and dispatching workers. |
+| `agents/spawn-contract.md` | Runtime-neutral contract for ephemeral dispatch and optional persistent registration. |
 | `agents/subagent-roles/` | Six portable worker role definitions. |
 | `references/` | Research protocols, source discovery, extraction, verification, safety, reporting, and specialized-domain guidance. |
 | `templates/` | Evidence ledgers, search logs, PRISMA flow, data packages, reports, and research plans. |
@@ -162,9 +164,9 @@ Point the runtime at:
 d-research-ultra/SKILL.md
 ```
 
-If your runtime supports worker agents, register the six role files from
-`agents/subagent-roles/` using the names and IDs in
-`agents/manifest.json`.
+If your runtime supports dynamic workers, the Main Research Agent uses
+the six role files in `agents/subagent-roles/` as ephemeral worker
+prompts. No persistent agent installation is required.
 
 ## Runtime Recipes
 
@@ -178,25 +180,37 @@ runtime-neutral.
 2. Load `SKILL.md` as the skill entry point.
 3. Load `AGENTS.md` as the root workflow when the runtime supports root
    agent instructions.
-4. Register workers from `agents/subagent-roles/`.
+4. Spawn workers dynamically from `agents/subagent-roles/`.
 5. Use `agents/manifest.json` for canonical names and execution waves.
-6. Use `agents/spawn-contract.md` to map list/install/dispatch/result
-   behavior to the host runtime.
+6. Use `agents/spawn-contract.md` to map ephemeral dispatch, results,
+   fallback behavior, and optional persistent registration.
 
 ### Claude Code
 
 Install the repository where Claude Code loads project or user skills.
-Then translate each file in `agents/subagent-roles/` into a Claude Code
-custom subagent.
+By default, use Claude Code's dynamic subagent mechanism to start
+ephemeral workers from the matching role files. These worker sessions
+may operate on the current project, but they do not become project
+agents and should not write `.claude/agents/`.
 
 Keep the active chat/session agent as the Main Research Agent. Worker
 agents should not call each other directly; orchestration remains in the
 main session.
 
+Persistent Claude custom agents are an optional optimization. Create
+them only when the user explicitly asks:
+
+- project scope: `.claude/agents/`
+- user scope: `~/.claude/agents/`
+
+Ask which scope to use before writing files. Installing or invoking D
+Research Ultra alone does not authorize either persistent scope.
+
 ### opencode
 
-Install this repository as a skill folder, then map the six role files
-to opencode agents using your project configuration.
+Install this repository as a skill folder, then use the host's dynamic
+task or subagent mechanism to run the six role prompts. Persistent
+project agents remain an explicit opt-in.
 
 Keep `D Research Ultra Orchestrator` as the primary behavior and allow
 delegation only to the six `D Research ...` workers listed in
@@ -207,12 +221,15 @@ delegation only to the six `D Research ...` workers listed in
 Use the same portable adapter pattern:
 
 1. Read `agents/manifest.json`.
-2. Create or register each worker from its role file.
+2. Spawn ephemeral workers from the required role files.
 3. Use `agents/orchestrator.md` as the main-agent playbook.
 4. Map dispatch, polling, failure handling, and final-result collection
    to the host runtime's native worker mechanism.
 
-No core file requires a specific command name.
+Run independent workers in parallel when possible, sequentially when
+necessary, and use manual role checklists when no real worker mechanism
+exists. No core file requires a specific command name or persistent
+worker installation.
 
 ### No Worker Support
 
@@ -250,6 +267,7 @@ npm run self-test
 Useful focused checks:
 
 ```bash
+npm run contract:check
 npm run refs:check
 npm run refs:check:decision-tree
 node scripts/run_python.mjs scripts/check_node_syntax.py
